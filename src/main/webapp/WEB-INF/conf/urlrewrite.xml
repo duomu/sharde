@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 4.0//EN"
+        "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
+
+<!-- 定义伪静态映射规则 -->
+<urlrewrite>
+    <rule>
+        <note>欢迎页伪静态</note>
+        <from>index.html</from>
+        <to type="forward">/</to>
+    </rule>
+</urlrewrite>

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yll.sharde.repository.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.yll.sharde.entity.User" >
+    <id column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    user_id, name, age, address
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yll.sharde.entity.UserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user_0
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Long" >
+    select
+    <include refid="Base_Column_List" />
+    from user_0
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="Long" >
+    delete from user_0
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yll.sharde.entity.UserExample" >
+    delete from user_0
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <!--不能传空的user_id，可以不传user_id使用自增赋值，使用useGeneratedKeys属性可以在插入后获取自增字段的值-->
+  <insert id="insert" useGeneratedKeys="true" keyProperty="userId" parameterType="com.yll.sharde.entity.User">
+    insert into user_0 (name, age,
+      address)
+    values (#{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER},
+      #{address,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="userId" parameterType="com.yll.sharde.entity.User" >
+    insert into user_0
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yll.sharde.entity.UserExample" resultType="java.lang.Integer" >
+    select count(*) from user_0
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update user_0
+    <set >
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.age != null" >
+        age = #{record.age,jdbcType=INTEGER},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update user_0
+      name = #{record.name,jdbcType=VARCHAR},
+      age = #{record.age,jdbcType=INTEGER},
+      address = #{record.address,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yll.sharde.entity.User" >
+    update user_0
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yll.sharde.entity.User" >
+    update user_0
+    set name = #{name,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectAll" resultType="java.util.HashMap">
+    SELECT user_id,name,age,address FROM user_0
+  </select>
+
+  <!--<insert id="insertBatchUser"  parameterType="java.util.List">
+    insert into user_0 (name, age,address)
+    values
+    <foreach collection="list" item="item" index="index" separator="," >
+      (#{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER},#{address,jdbcType=VARCHAR})
+    </foreach>
+  </insert>-->
+
+  <sql id="Simple_Where_Clause">
+    <where>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="name != null" >
+        AND name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="age != null" >
+        AND age = #{age,jdbcType=INTEGER}
+      </if>
+      <if test="address != null" >
+        AND address = #{address,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </sql>
+
+  <sql id="Simple_Where_IN_Clause">
+    <where>
+      <if test="userIds != null" >
+        user_id IN (${userIds})
+      </if>
+      <if test="name != null" >
+        AND name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="age != null" >
+        AND age = #{age,jdbcType=INTEGER}
+      </if>
+      <if test="address != null" >
+        AND address = #{address,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </sql>
+
+  <sql id="Foreach_Clause">
+    <foreach collection="tableNameList" index="index" item="item" separator="UNION ALL">
+      SELECT
+      <include refid="Base_Column_List"/>
+      FROM ${item}
+      <include refid="Simple_Where_IN_Clause"/>
+    </foreach>
+  </sql>
+
+  <!--跨表查询User-->
+  <select id="selectByMultiTable" parameterType="Map" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List"/>
+    FROM (
+      <include refid="Foreach_Clause"/>
+    ) AS user_tmp
+  </select>
+
+  <select id="countByMultiTable" parameterType="Map" resultType="java.lang.Integer">
+    SELECT
+      COUNT(*)
+    FROM (
+      <include refid="Foreach_Clause"/>
+    ) AS user_tmp
+  </select>
+
+  <!--批量插入用户-->
+  <insert id="insertBatchUser" parameterType="Map">
+    INSERT INTO ${tableName}(<include refid="Base_Column_List"/>)
+    VALUES
+    <foreach collection="users" item="item" index="index" separator=",">
+      (#{item.userId,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, #{item.age,jdbcType=INTEGER},#{item.address,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+
+  <!--批量更新用户-->
+  <update id="updateBatchUser" parameterType="Map">
+    INSERT INTO ${tableName}(<include refid="Base_Column_List"/>)
+    VALUES
+    <foreach collection="users" item="item" index="index" separator=",">
+      (#{item.userId,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, #{item.age,jdbcType=INTEGER},#{item.address,jdbcType=VARCHAR})
+    </foreach>
+    ON DUPLICATE KEY UPDATE
+    name = VALUES(name),
+    age = VALUES(age),
+    address = VALUES(address)
+  </update>
+
+  <!--批量删除用户-->
+  <delete id="deleteBatchUser" parameterType="Map">
+    DELETE FROM ${tableName} WHERE user_id IN (${userIds})
+  </delete>
+</mapper>

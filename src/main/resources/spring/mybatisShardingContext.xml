@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:rdb="http://www.dangdang.com/schema/ddframe/rdb"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.dangdang.com/schema/ddframe/rdb http://www.dangdang.com/schema/ddframe/rdb/rdb.xsd">
+
+    <!-- 加载属性文件db.properties -->
+    <context:property-placeholder location="classpath:db.properties" ignore-unresolvable="true"/>
+    <!-- 配置数据源  c3p0-->
+    <bean id="ds_0" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${db.driver}" />
+        <property name="jdbcUrl" value="${db.url}" />
+        <property name="user" value="${db.username}" />
+        <property name="password" value="${db.password}" />
+        <property name="initialPoolSize" value="3"/>			<!-- 初始化连接池大小 -->
+        <property name="minPoolSize" value="5"/>				<!-- 连接池中保留最小连接数 -->
+        <property name="maxPoolSize" value="20"/>				<!-- 连接池中保留的最大连接数: 默认是5 -->
+        <property name="maxIdleTime" value="60"/>				<!-- 最大空闲时间,60秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0 -->
+        <property name="numHelperThreads" value="6"/>
+        <property name="acquireIncrement" value="6"/>			<!-- 定义在从数据库获取新连接失败后重复尝试的次数 -->
+        <property name="idleConnectionTestPeriod" value="60"/>	<!-- 每60秒检查连接池中的空闲连接 -->
+        <property name="checkoutTimeout" value="30000"/>
+        <property name="testConnectionOnCheckout"  value="false" />	<!-- 关闭每个connection提交的 时候都将校验其有效性 -->
+    </bean>
+
+    <rdb:strategy id="userTableShardingStrategy" sharding-columns="user_id" algorithm-class="com.yll.sharde.algorithm.DynamicUserTableShardingAlgorithm"/>
+    <rdb:strategy id="userJobTableShardingStrategy" sharding-columns="user_id" algorithm-class="com.yll.sharde.algorithm.DynamicUserJobTableShardingAlgorithm"/>
+    <!--<rdb:strategy id="userTableShardingStrategy" sharding-columns="user_id" algorithm-expression="user_${user_id.longValue() % 5}"/>-->
+    <!--<rdb:strategy id="userJobTableShardingStrategy" sharding-columns="user_id" algorithm-expression="user_job_${user_id.longValue() % 5}"/>-->
+
+    <rdb:data-source id="shardingDataSource">
+        <rdb:sharding-rule data-sources="ds_0">
+            <rdb:table-rules>
+                <!--dynamic="true"可不用配置actual-tables-->
+                <rdb:table-rule logic-table="user_0" actual-tables="user_${0..9}" table-strategy="userTableShardingStrategy">
+                    <rdb:generate-key-column column-name="user_id"/>
+                </rdb:table-rule>
+                <rdb:table-rule logic-table="user_job_0" actual-tables="user_job_${0..9}" table-strategy="userJobTableShardingStrategy">
+                    <rdb:generate-key-column column-name="user_id"/>
+                </rdb:table-rule>
+            </rdb:table-rules>
+            <!--<rdb:default-database-strategy sharding-columns="none"
+                                           algorithm-class="com.dangdang.ddframe.rdb.sharding.api.strategy.database.NoneDatabaseShardingAlgorithm"/>-->
+        </rdb:sharding-rule>
+        <!--<rdb:props>
+            <prop key="metrics.enable">true</prop>
+            <prop key="sql.show">true</prop>
+        </rdb:props>-->
+    </rdb:data-source>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="shardingDataSource"/>
+        <property name="mapperLocations" value="classpath*:mybatis/mapper/*.xml" />
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.yll.sharde.repository"></property>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="shardingDataSource" />
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager" />
+</beans>

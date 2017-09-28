@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - @localhost" uuid="65b15895-20e0-4b3f-b941-354ec1f4d7b1">
+    <database-info product="MySQL" version="5.6.26-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.40 ( Revision: 402933ef52cad9aa82624e80acbea46e3a701ce6 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.5"/>
+  </data-source>
+  <data-source name="MySQL - test@localhost" uuid="1e24bf9b-2875-4878-99b1-968ecd3f7b41">
+    <database-info product="MySQL" version="5.6.26-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.40 ( Revision: 402933ef52cad9aa82624e80acbea46e3a701ce6 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.5">
+      <schema id="1" name="test"/>
+      <table id="2" parent="1" name="user"/>
+      <routine id="3" parent="1" name="test">
+        <routine-kind>PROCEDURE</routine-kind>
+      </routine>
+      <column id="4" parent="2" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="5" parent="2" name="name">
+        <data-type>varchar(32)</data-type>
+      </column>
+      <column id="6" parent="2" name="age">
+        <data-type>int(10)</data-type>
+      </column>
+      <column id="7" parent="2" name="address">
+        <data-type>varchar(200)</data-type>
+      </column>
+      <key id="8" parent="2" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <argument id="9" parent="3" name="num">
+        <direction>IN</direction>
+        <data-type>int(11)</data-type>
+      </argument>
+    </database-model>
+  </data-source>
+</component>
