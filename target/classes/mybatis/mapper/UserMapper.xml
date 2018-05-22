@@ -68,7 +68,7 @@
   <sql id="Base_Column_List" >
     user_id, name, age, address
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yll.sharde.entity.UserExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yll.sharde.entity.UserExample">
     select
     <if test="distinct" >
       distinct
@@ -249,8 +249,8 @@
     </foreach>
   </sql>
 
-  <!--跨表查询User-->
-  <select id="selectByMultiTable" parameterType="Map" resultMap="BaseResultMap">
+  <!--批量查询用户-->
+  <select id="selectAll2" parameterType="Map" resultMap="BaseResultMap">
     SELECT
       <include refid="Base_Column_List"/>
     FROM (
@@ -258,7 +258,7 @@
     ) AS user_tmp
   </select>
 
-  <select id="countByMultiTable" parameterType="Map" resultType="java.lang.Integer">
+  <select id="countAll" parameterType="Map" resultType="java.lang.Integer">
     SELECT
       COUNT(*)
     FROM (

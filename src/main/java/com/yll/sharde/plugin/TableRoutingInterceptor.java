@@ -44,7 +44,7 @@ public class TableRoutingInterceptor implements Interceptor {
     }
 
     /**
-     *决定是否触发intercept()方法，s使用jdk动态代理，给target创建一个代理对象，以实现方法拦截和增强功能，此对象会回调intercept()方法
+     *决定是否触发intercept()方法，使用jdk动态代理，给target创建一个代理对象，以实现方法拦截和增强功能，此对象会回调intercept()方法
      * @param target
      * @return
      */

@@ -32,6 +32,7 @@ public class MybatisExample {
 
         //simple select
         UserExample example = new UserExample();
+//        example.createCriteria().andUserIdEqualTo(10l);
         List<User> users = sqlSession.selectList("selectByExample", example);
         if (users == null || users.size() == 0) {
             System.out.println("select 0");
@@ -39,14 +40,19 @@ public class MybatisExample {
             System.out.println("select " + users.size());
         }
 
+//        sqlSession.close();//清空一级缓存
+//        sqlSession = factory.openSession();
+
         //mapper select
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        users = userMapper.selectByExample(example);
+        users = userMapper.selectByExample(example);//走缓存
         if (users == null || users.size() == 0) {
             System.out.println("select 0");
         } else {
             System.out.println("select " + users.size());
         }
+
+        sqlSession.close();//需要手动关闭sqlSession
 
     }
 }

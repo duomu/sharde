@@ -1,6 +1,8 @@
 package com.yll.sharde.entity;
 
-public class User {
+import java.io.Serializable;
+
+public class User{
     private Long userId;
 
     private String name;

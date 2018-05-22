@@ -68,7 +68,7 @@
   <sql id="Base_Column_List" >
     user_id, name, age, address
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yll.sharde.entity.UserExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yll.sharde.entity.UserExample">
     select
     <if test="distinct" >
       distinct
@@ -250,7 +250,7 @@
   </sql>
 
   <!--批量查询用户-->
-  <select id="selectAll" parameterType="Map" resultMap="BaseResultMap">
+  <select id="selectAll2" parameterType="Map" resultMap="BaseResultMap">
     SELECT
       <include refid="Base_Column_List"/>
     FROM (

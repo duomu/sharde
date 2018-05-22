@@ -54,6 +54,35 @@ public class JdbcExample {
         }
     }
 
+    public void test() throws ClassNotFoundException, SQLException {
+
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet resultSet = null;
+        //注册JDBC驱动
+        Class.forName(DRIVER);
+        //获取一个数据库连接
+        conn = DriverManager.getConnection(URL, USER, PASSWORD);
+
+        //执行查询
+        stmt = conn.createStatement();
+        String sql = "select * from user";
+        resultSet = stmt.executeQuery(sql);
+
+        //读取结果集
+        while (resultSet.next()) {
+            Integer userId = resultSet.getInt("user_id");
+            String name = resultSet.getString("name");
+            Integer age = resultSet.getInt("age");
+            String address = resultSet.getString("address");
+            System.out.println(userId + ", " + name + ", " + age + ", " + address);
+        }
+
+        ReleaseUtil.close(resultSet);
+        ReleaseUtil.close(stmt);
+        ReleaseUtil.close(conn);
+    }
+
     public static void handleByPreparedStatement() throws SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
