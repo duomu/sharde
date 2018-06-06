@@ -1,4 +1,0 @@
-#使用mybatis-generator生成model、mapper、sql映射文件
-mvn mybatis-generator:generate
-#创建maven骨架项目
-mvn sharde:create-from-project
